@@ -52,3 +52,5 @@ ali,1726,44.0,44.0,77.0
 ## Notes
 - When you add a new student from the menu, it is appended to `data.csv`.
 - When you remove a student, it is removed from memory and from `data.csv`.
+
+## By Odai Aqlan
