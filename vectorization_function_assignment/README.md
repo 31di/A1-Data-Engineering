@@ -1,9 +1,11 @@
+![Flow Diagram](./Flow.png)
+
 # Vectorization Function Assignment
 
-a simple **Bag of Words** approach to convert a text string into a **binary vector** based on a fixed vocabulary (bag of words).
+This is a simple **Bag of Words** approach to convert a text string into a **binary vector** based on a fixed vocabulary (bag of words).
 
 ## What it does
-![Flow Diagram](Flow.png)
+
 The function takes:
 - `text`: a sentence/string.
 - `bag_of_words`: a list of vocabulary words.
