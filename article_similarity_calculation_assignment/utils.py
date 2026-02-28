@@ -7,7 +7,7 @@ def load_data(file_path):
     try:
         reader = csv.reader(open(file_path, "r"))
         # Iterate over each row in the file
-        data=np.array([], ndmin=2)
+        data = np.array([], ndmin=2)
         reader.__next__()  # Skip the header row
         for row in reader:
             data = np.vstack([data, row]) if data.size else np.array([row])
@@ -15,7 +15,8 @@ def load_data(file_path):
     except Exception as e:
         print(f"An error occurred while loading the data: {e}")
         return None
-        
+
+
 def clean_text(text):
     import re
 
@@ -40,7 +41,6 @@ def create_bag_of_words(text):
                 bag_of_words.append(word)
     return bag_of_words
 
-    
 
 def change_text_to_vector(data, bag_of_words):
     bag_of_words = np.array(bag_of_words)
@@ -53,7 +53,6 @@ def change_text_to_vector(data, bag_of_words):
             vector[i] = 1
 
     return vector
-
 
 
 def calculate_cosine_similarity(articals_matrix):
@@ -74,10 +73,13 @@ def calculate_cosine_similarity(articals_matrix):
                 if magnitude_vector1 == 0 or magnitude_vector2 == 0:
                     similarity_matrix[i, j] = 0.0
                 else:
-                    cosine_similarity = dot_product / (magnitude_vector1 * magnitude_vector2)
+                    cosine_similarity = dot_product / (
+                        magnitude_vector1 * magnitude_vector2
+                    )
                     similarity_matrix[i, j] = cosine_similarity
 
     return similarity_matrix
+
 
 def save_similarity_matrix(similarity_matrix):
     try:
@@ -86,6 +88,7 @@ def save_similarity_matrix(similarity_matrix):
         print("Similarity matrix saved to similarities.pkl")
     except Exception as e:
         print(f"An error occurred while saving the similarity matrix: {e}")
+
 
 def load_similarity_matrix():
     try:
@@ -96,12 +99,15 @@ def load_similarity_matrix():
     except Exception as e:
         print(f"An error occurred while loading the similarity matrix: {e}")
         return None
-    
+
+
 def get_top_k_similar_articles(similarity_matrix, article_index, k):
     if article_index < 0 or article_index >= similarity_matrix.shape[0]:
         print(f"Invalid article index: {article_index}")
         return []
 
     similarities = similarity_matrix[article_index]
-    top_k_indices = np.argsort(similarities)[::-1][1:k+1]  # Exclude the article itself
+    top_k_indices = np.argsort(similarities)[::-1][
+        1 : k + 1
+    ]  # Exclude the article itself
     return top_k_indices.tolist()
