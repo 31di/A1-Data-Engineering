@@ -1,5 +1,5 @@
 
-# Article Similarity 
+# Article Similarity
 
 This assignment calculates how similar each article is to the others.
 
@@ -8,8 +8,8 @@ This assignment calculates how similar each article is to the others.
 - Load articles from `articles.csv`
 - Clean the text (lowercase, remove punctuation and numbers)
 - Convert each article to a vector (Bag of Words)
-- Compute **Cosine Similarity** between every pair of articles 
-- Save the result as a square matrix in `similarities.pkl` 
+- Compute **Cosine Similarity** between every pair of articles
+- Save the result as a square matrix in `similarities.pkl`
 
 ## Output
 
@@ -29,5 +29,4 @@ Open `main.ipynb` and run the cells from top to bottom.
 - `calculate_cosine_similarity(articles_matrix)`: Computes cosine similarity between every pair of vectors using `numpy.dot` and `numpy.linalg.norm` and returns a square similarity matrix.
 - `save_similarity_matrix(similarity_matrix)`: Saves the similarity matrix into `similarities.pkl` using `pickle`.
 - `load_similarity_matrix()`: Loads and returns the similarity matrix from `similarities.pkl`.
-- `get_top_k_similar_articles(similarity_matrix, article_index, k)`: Returns the indices of the top `k` most similar articles to the chosen article (excluding itself).
-
+- `get_top_k_similar_articles(similarity_matrix, article_index, k)`: Returns the indices of the top `k` most similar articles to the chosen article (excluding itself) 
