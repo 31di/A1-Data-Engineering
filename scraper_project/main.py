@@ -1,0 +1,10 @@
+import os
+print("Starting the scraping process...")
+os.system("python scraper_project/scraper.py")
+print("Scraping completed. Starting the processing of data...")
+os.system("python scraper_project/processor.py")
+print("Data processing completed. Starting the organization of data...")
+os.system("python scraper_project/organizer.py")
+print("Data organization completed. All tasks are done!")
+print("---------------------------------")
+print("Data pipeline is completed successfully!")
