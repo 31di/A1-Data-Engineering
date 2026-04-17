@@ -1,0 +1,12 @@
+[Unit]
+Description=Ubuntu Scraper Project with FastAPI Service
+After=network.target
+
+[Service]
+User=odai
+WorkingDirectory=/usr/local/ubunto_project
+ExecStart=/usr/local/ubunto_project/venv/bin/python3 /usr/local/ubunto_project/main.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

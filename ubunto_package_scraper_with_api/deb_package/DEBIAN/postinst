@@ -1,0 +1,12 @@
+#!/bin/bash
+cd /usr/local/ubunto_project
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+
+# نسخ ملف الخدمة
+cp /usr/local/ubunto_project/ubunto_project.service /etc/systemd/system/
+systemctl daemon-reload
+systemctl enable ubunto_project
+systemctl start ubunto_project
+
