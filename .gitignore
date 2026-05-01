@@ -30,6 +30,21 @@ htmlcov/
 # Logs
 *.log
 
+# Local databases (SQLite)
+*.sqlite
+*.sqlite3
+*.db
+*.db3
+*.sqlite-journal
+*.db-journal
+*.sqlite-wal
+*.sqlite-shm
+*.db-wal
+*.db-shm
+
+# Node / frontend dependencies
+node_modules/
+
 # OS files (Windows)
 Thumbs.db
 Desktop.ini

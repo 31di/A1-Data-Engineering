@@ -1,0 +1,171 @@
+-- Database: new-DWH
+
+-- DROP DATABASE IF EXISTS "new-DWH";
+
+CREATE DATABASE "new-DWH"
+    WITH
+    OWNER = postgres
+    ENCODING = 'UTF8'
+    LC_COLLATE = 'English_United States.1256'
+    LC_CTYPE = 'English_United States.1256'
+    LOCALE_PROVIDER = 'libc'
+    TABLESPACE = pg_default
+    CONNECTION LIMIT = -1
+    IS_TEMPLATE = False;
+
+
+
+
+    -- Customers
+CREATE TABLE DimCustomer (
+    customer_key SERIAL PRIMARY KEY,
+    customer_id VARCHAR(50) UNIQUE,
+    customer_unique_id VARCHAR(50),
+    customer_city VARCHAR(100),
+    customer_state VARCHAR(50)
+);
+
+-- Sellers
+CREATE TABLE DimSeller (
+    seller_key SERIAL PRIMARY KEY,
+    seller_id VARCHAR(50) UNIQUE,
+    seller_city VARCHAR(100),
+    seller_state VARCHAR(50)
+);
+
+-- Products
+CREATE TABLE DimProduct (
+    product_key SERIAL PRIMARY KEY,
+    product_id VARCHAR(50) UNIQUE,
+    product_category_name VARCHAR(100),
+    product_weight_g NUMERIC,
+    product_length_cm NUMERIC,
+    product_height_cm NUMERIC,
+    product_width_cm NUMERIC
+);
+
+-- Dates
+CREATE TABLE DimDate (
+    date_key NUMERIC PRIMARY KEY,
+    full_date DATE,
+    day INT,
+    month INT,
+    year INT,
+    quarter INT,
+    week INT
+);
+
+INSERT INTO public.dimdate (date_key, full_date, day, month, year, quarter, week)
+SELECT
+    (EXTRACT(YEAR FROM d)::INTEGER * 10000) +
+    (EXTRACT(MONTH FROM d)::INTEGER * 100) +
+    (EXTRACT(DAY FROM d)::INTEGER) AS date_key,
+    d AS full_date,
+    EXTRACT(DAY FROM d)::INTEGER AS day,
+    EXTRACT(MONTH FROM d)::INTEGER AS month,
+    EXTRACT(YEAR FROM d)::INTEGER AS year,
+    EXTRACT(QUARTER FROM d)::INTEGER AS quarter,
+    EXTRACT(WEEK FROM d)::INTEGER AS week
+FROM generate_series('2015-01-01'::date, '2030-12-31'::date, '1 day') d;
+
+CREATE TABLE public.dimtime (
+    time_key        INTEGER PRIMARY KEY,
+    full_time       TIME NOT NULL,
+    hour            INTEGER NOT NULL,
+    minute          INTEGER NOT NULL,
+    second          INTEGER NOT NULL
+);
+
+INSERT INTO public.dimtime (time_key, full_time, hour, minute, second)
+SELECT
+    (EXTRACT(HOUR FROM t)::INTEGER * 10000) +
+    (EXTRACT(MINUTE FROM t)::INTEGER * 100) +
+    (EXTRACT(SECOND FROM t)::INTEGER) AS time_key,
+    t::time AS full_time,
+    EXTRACT(HOUR FROM t)::INTEGER AS hour,
+    EXTRACT(MINUTE FROM t)::INTEGER AS minute,
+    EXTRACT(SECOND FROM t)::INTEGER AS second
+FROM generate_series(
+        '2024-01-01 00:00:00'::timestamp,
+        '2024-01-01 23:59:59'::timestamp,
+        '1 second'::interval
+    ) AS t;
+
+-- Leads
+CREATE TABLE DimLead (
+    lead_key SERIAL PRIMARY KEY,
+    mql_id VARCHAR(50) UNIQUE,
+    first_contact_date DATE,
+    landing_page_id VARCHAR(50),
+    origin VARCHAR(50)
+);
+
+-- Business Segment / Lead Type
+CREATE TABLE DimBusinessSegment (
+    segment_key SERIAL PRIMARY KEY,
+    business_segment VARCHAR(100),
+    lead_type VARCHAR(50),
+    lead_behaviour_profile VARCHAR(100),
+    business_type VARCHAR(100)
+);
+
+-- ____________________________________________________
+
+-- FactOrder (Aggregated على مستوى الطلب)
+CREATE TABLE FactOrder (
+    order_key SERIAL PRIMARY KEY,
+    order_id VARCHAR(50) UNIQUE,
+    customer_key INT,
+    total_payment NUMERIC,
+    total_items INT,
+    total_sellers INT,
+    date_purchase_key INT,
+    date_approved_key INT,
+    date_delivered_carrier_key INT,
+    date_delivered_customer_key INT,
+    date_estimated_key INT,
+    time_purchase_key INT,
+    time_approved_key INT,
+    time_delivered_carrier_key INT,
+    time_delivered_customer_key INT,
+    delivery_duration INTERVAL,
+    is_late_delivery BOOLEAN,
+    order_status VARCHAR(50)
+);
+
+-- FactSales
+CREATE TABLE FactSales (
+    sales_key SERIAL PRIMARY KEY,
+    order_id VARCHAR(50),
+    product_key INT,
+    seller_key INT,
+    customer_key INT,
+    date_key INT,
+    price NUMERIC,
+    freight_value NUMERIC
+);
+
+-- FactReviews
+CREATE TABLE FactReviews (
+    review_key SERIAL PRIMARY KEY,
+    review_id VARCHAR(50) UNIQUE,
+    order_id VARCHAR(50),
+    customer_key INT,
+    product_key INT,
+    seller_key INT,
+    date_key INT,
+    review_score INT
+);
+
+-- FactLeads
+CREATE TABLE FactLeads (
+    lead_fact_key SERIAL PRIMARY KEY,
+    mql_id VARCHAR(50),
+    seller_key INT,
+    lead_key INT,
+    segment_key INT,
+    date_key INT,
+    declared_monthly_revenue NUMERIC,
+    declared_product_catalog_size INT,
+    conversion_flag BOOLEAN
+);
