@@ -15,7 +15,7 @@
 - **Architecture Diagram.png**  
   High-level architecture diagram for the pipeline.
 
-- **process-groups-imags/**  
+- **screenshots/**  
   Screenshots of the NiFi process groups and sample outputs.
 
 ## Built With Love by odai Aqlan
